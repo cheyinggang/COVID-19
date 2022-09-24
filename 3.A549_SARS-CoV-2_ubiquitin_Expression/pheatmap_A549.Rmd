@@ -1,0 +1,52 @@
+---
+title: "3.A549_SARS-CoV-2_ubiquitin_Expression"
+author: "COVID_19"
+date: "2022-09-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+rm(list = ls())
+
+rt=read.table("A549_SARS-CoV-2_ubi.txt",sep="\t",header=T,row.names=1,check.names=F)   
+rt1=t(rt[,-(1:2)])
+rt1=log2(rt1+1)
+rt1=rt1[rowMeans(rt1)>0,]
+library(pheatmap)
+Type=as.data.frame(rt[,1:2])
+rownames(Type)=colnames(rt1)
+pdf(file = "heatmap.pdf",width = 6,height = 8)
+pheatmap(rt1, annotation_col=Type,gaps_col = c(18),
+         color =colorRampPalette(c("green4", "white", "#ED0000FF"))(50),
+         cluster_rows = T,
+         cluster_cols =F,
+         fontsize=12,
+         fontsize_row=8,
+         scale="row",
+         show_colnames=F,
+        show_rownames=F,
+         fontsize_col=3)
+dev.off()
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

@@ -1,0 +1,56 @@
+---
+title: "6.PCA_of_Caco-2_of_SARS-CoV-2"
+author: "COVID_19"
+date: "2022-09-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+rm(list=ls())
+rt2=read.table("ubi_PXD017710.txt",sep="\t",header=T,check.names=F) 
+rownames(rt2)<-rt2[,1]
+rt2<-rt2[,2:ncol(rt2)]
+
+rt2=rt2[(order(rt2[,1])),]
+summary(factor(rt2[,1]))
+
+
+rt1=rt2[,4:ncol(rt2)]
+rts=log2(rt1+1)
+rt=as.matrix(rts)  
+group=rt2[,2]
+df=cbind(as.data.frame(rt),group=rt2[,2])
+head(df)
+
+colP<-c('#FB9A99', 'orchid', '#99c9fb', 'yellow' )
+pca_dat3 <- prcomp( df[,1:(ncol(df)-1)], rank. = 3)
+library(factoextra)
+fviz_pca_ind(pca_dat3,geom.ind="point",pointsize=4,
+             pointshape=21,fill.ind=group,ellipse.type = "confidence",
+             palette=colP,
+             legend.titl="Groups",addEllipses = TRUE,
+             title="PCA of ubiquitin proteins")+theme_classic()
+
+ggsave(filename="1.PCA.pdf",width =5,height =3) 
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
